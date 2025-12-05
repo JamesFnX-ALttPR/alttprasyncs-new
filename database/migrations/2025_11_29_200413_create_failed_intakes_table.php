@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('reason');
-            $table->text('info_bot');
+            $table->text('info_bot')->nullable();
             $table->timestamps();
         });
     }

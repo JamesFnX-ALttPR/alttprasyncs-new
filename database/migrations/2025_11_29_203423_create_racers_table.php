@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('racetime_id');
             $table->string('name');
-            $table->integer('discriminator');
+            $table->integer('discriminator')->nullable();
             $table->timestamps();
         });
     }
