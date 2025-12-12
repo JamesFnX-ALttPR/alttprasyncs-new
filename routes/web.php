@@ -1,6 +1,12 @@
 <?php
 
-use App\Http\Controllers\RacetimeController;
+use App\Http\Controllers\ModeController;
+use App\Http\Controllers\IntakeController;
+use App\Http\Controllers\ResultController;
+use App\Http\Controllers\RaceController;
+use App\Http\Controllers\RacerController;
+use App\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\SessionController;
 use App\Models\Race;
 use App\Models\Racer;
 use App\Models\Result;
@@ -8,65 +14,35 @@ use App\Models\Mode;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    dd(gmdate("Y-m-d G:i:s", time()));
 });
 
 Route::get("/intake/{id}", function ($id) {
     return view("intaketest", [
-        'urls' => RacetimeController::gatherALttPRDataURLs($id)
+        'urls' => IntakeController::gatherALttPRDataURLs($id)
     ]);
 });
 
-Route::get('/results/{id}', function($id) {
-    return view('results.show', [
-        'raceresult' => Race::where('id', $id)->with(array ('result' => function ($query) { $query->orderBy('time', 'ASC'); }, 'result.racer'))->withAvg(['result' => function($query) { $query->where('forfeit', 0); }], 'time')->first(),
-        'id' => $id,
-    ]);
-});
 
-Route::get('racers', function () {
-    return view('racer.index', [
-        'racers' => Racer::withCount('result')->orderBy('result_count', 'DESC')->orderBy('name', 'ASC')->paginate(20)
-    ]);
-});
+Route::get('racers', [RacerController::class, 'index']);
+Route::get('racer/{id}', [RacerController::class,'show']);
 
-Route::get('racer/{id}', function($id) {
-    return view('racer.show', [
-        //'racer' => Racer::where('id', $id)->with(['result', 'result.race' => function($query) {$query->orderBy('start_time', 'DESC'); }, 'result.race.mode'])->first(),
-        'racer' => Racer::where('id', $id)->first(),
-        'results' => Result::where('racer_id', $id)->join('races', 'races.id', '=', 'results.race_id')->with('race')->orderByDesc('races.start_time')->paginate(20),
-    ]);
-});
+Route::get('/races', [RaceController::class,'index']);
+Route::get('/races/coop', [RaceController::class,'indexCoop']);
+Route::get('/races/create', [RaceController::class,'create']);
+Route::post('/races/create', [RaceController::class,'store']);
+Route::get('/race/{id}', [RaceController::class,'show']);
 
-Route::get('/races', function() {
-    return view('races.index', [
-        'races' => Race::with('mode')->withCount('result')->orderBy('start_time', 'DESC')->paginate(20)
-    ]);
-});
+Route::get('/modes', [ModeController::class,'index']);
+Route::get('/mode/{id}', [ModeController::class,'show']);
 
-Route::get('/races/coop', function() {
-    return view('races.index', [
-        'races' => Race::where('team_race', 1)->with('mode')->withCount('result')->orderBy('start_time', 'DESC')->paginate(20),
-    ]);
-});
+Route::get('/async/{id}', [ResultController::class,'create']);
+Route::post('/submitasync', [ResultController::class,'store']);
 
-Route::get('/mode/{id}', function($id) {
-    return view('mode.show', [
-        'mode' => Mode::where('id', $id)->first(),
-        'races' => Race::where('mode_id', $id)->withCount('result')->orderBy('start_time', 'DESC')->paginate(20),
-    ]);
-});
+Route::get('/register', [RegisteredUserController::class,'create']);
+Route::post('/register', [RegisteredUserController::class,'store']);
 
-Route::get('/async/{id}', function($id) {
-    return view('results.create', [
-        'race' => Race::where('id', $id)->first(),
-    ]);
-});
+Route::get('/login', [SessionController::class,'create']);
+Route::post('/login', [SessionController::class,'store']);
 
-Route::post('/async/{id}', function($id) {
-    Result::create([
-        'race_id' => $id,
-        'racer_id' => 11,
-        
-    ]);
-});
+Route::post('/logout', [SessionController::class,'destroy']);

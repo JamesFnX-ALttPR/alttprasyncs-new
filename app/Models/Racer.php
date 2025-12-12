@@ -11,4 +11,8 @@ class Racer extends Model
     public function result() {
         return $this->hasMany(Result::class);
     }
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Mode;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->boolean('spoiler_race')->default(false);
             $table->text('spoiler_log')->nullable();
             $table->boolean('from_racetime')->default(false);
+            $table->foreignIdFor(User::class)->nullable();
             $table->timestamps();
         });
     }

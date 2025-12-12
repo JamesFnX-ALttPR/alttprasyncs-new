@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Racer;
 
 class User extends Authenticatable
 {
@@ -18,7 +19,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'display_name',
         'email',
         'password',
     ];
@@ -45,4 +46,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function racer() {
+        return $this->hasOne(Racer::class,'user_id','id');
+    }    
+
+    public function race() {
+        return $this->hasMany(Race::class);
+    }    
 }

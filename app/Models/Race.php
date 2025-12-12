@@ -6,12 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Race extends Model
 {
-    protected $fillable = ['name', 'mode_id', 'seed','hash','start_time','team_race','spoiler_race','spoiler_log','from_racetime', 'description'];
+    protected $fillable = ['name', 'mode_id', 'seed', 'hash', 'start_time', 'team_race', 'spoiler_race', 'spoiler_log', 'from_racetime', 'description', 'user_id'];
 
     public function result() {
         return $this->hasMany(Result::class);
     }
     public function mode() {
         return $this->belongsTo(Mode::class);
+    }
+    public function user() {
+        return $this->belongsTo(User::class);
     }
 }

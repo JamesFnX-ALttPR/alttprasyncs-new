@@ -2,7 +2,7 @@
 @php
 $name = str_replace('/data', '', str_replace('https://racetime.gg/', '', $url));
 if (! \App\Models\Race::where('name', $name)->exists() && ! \App\Models\FailedIntake::where('name', $name)->exists()) {
-    $race = new \App\Http\Controllers\RacetimeController();
+    $race = new \App\Http\Controllers\IntakeController();
     $race_data = $race->getRacetimeData($url);
     $parsed_data = $race->parseRacetimeData($race_data);
     if ($parsed_data['accepted']) {
@@ -21,7 +21,7 @@ if (! \App\Models\Race::where('name', $name)->exists() && ! \App\Models\FailedIn
         } else {
             $team_race = 0;
         }
-        $modequery = \App\Models\Mode::updateOrCreate(['name' => $mode], ['name' => $mode, 'description' => \App\Http\Controllers\RacetimeController::getModeData($mode)]);
+        $modequery = \App\Models\Mode::updateOrCreate(['name' => $mode], ['name' => $mode, 'description' => \App\Http\Controllers\IntakeController::getModeData($mode)]);
         $mode_id = $modequery->id;
         $racequery = \App\Models\Race::create(['name' => $parsed_data['name'], 'mode_id' => $mode_id, 'seed' => $parsed_data['seed'], 'hash' => $parsed_data['hash'], 'description' => $parsed_data['description'], 'start_time' => $parsed_data['start_time'], 'team_race' => $team_race, 'spoiler_race' => $spoiler_race, 'spoiler_log' => $spoiler_log, 'from_racetime' => 1]);
         $race_id = $racequery->id;
