@@ -1,7 +1,8 @@
-<el-select id="{{ $slot }}" name="{{ $slot }}" value="Big_Key" class="mt-2 block">
+@props(['value' => 'Big_Key'])
+<el-select {{ $attributes->merge(['id' => $slot, 'name' => $slot, 'class' => 'mt-2 block']) }} value="{{ $value }}">
   <button type="button" class="grid w-fit cursor-default grid-cols-1 rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-600 sm:text-sm/6">
     <el-selectedcontent class="col-start-1 row-start-1 flex items-center gap-3 pr-6">
-      <img src="/images/big_key.png" alt="" class="size-5 shrink-0 rounded-full bg-gray-100" />
+      <img src="/images/{{ Str::lower($value) }}.png" alt="" class="size-5 shrink-0 rounded-full bg-gray-100" />
       <span class="block truncate">Big Key</span>
     </el-selectedcontent>
     <svg viewBox="0 0 16 16" fill="currentColor" data-slot="icon" aria-hidden="true" class="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4">

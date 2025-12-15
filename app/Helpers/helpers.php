@@ -14,11 +14,51 @@ if (! function_exists("gatherDataUrls")) {
     }
 }
 
+if (! function_exists("getSpoilerLog")) {
+    function getSpoilerLog($name) {
+        $url = 'https://racetime.gg/' . $name . '.txt';
+        $response = Http::get($url);
+        $pattern = '/spoiler.+(https\:\/\/.+\.txt|https\:\/\/.+\.json)/';
+        if (preg_match($pattern, $response)) {
+            preg_match($pattern, $response, $matches);
+            return $matches[1];
+        }
+    }
+}
+
 if (! function_exists("gatherRaceData")) {
     function gatherRaceData(string $url) {
         $data = Http::get($url);
         $json = $data->json();
         return $json;
+    }
+}
+
+if (! function_exists("getRacerData")) {
+    function getRacerData(array $data, int $ordinal) {
+        if (array_key_exists('user', $data['entrants'][$ordinal]) && $data['entrants'][$ordinal]['user'] != null) {
+            $racer_id = $data['entrants'][$ordinal]['user']['id'];
+            $racer_name = $data['entrants'][$ordinal]['user']['name'];
+            $racer_discriminator = $data['entrants'][$ordinal]['user']['discriminator'];
+        } else {
+            $racer_id = 'DeletedUser';
+            $racer_name = 'Deleted Racer';
+            $racer_discriminator = null;
+        }
+        if ($data['entrants'][$ordinal]['finish_time'] == null) {
+            $racer_forfeit = 1;
+            $racer_time = 99999;
+        } else {
+            $racer_forfeit = 0;
+            $finish = $data['entrants'][$ordinal]['finish_time'];
+            $finish = preg_replace('/\.[0-9]{6}/', '', $finish);
+            $interval = new DateInterval($finish);
+            $total = ($interval->h * 60 * 60) + ($interval->i * 60) + $interval->s;
+            $racer_time = $total;
+        }
+        $racer_team = $data['entrants'][$ordinal]['team'];
+        $racer_comment = $data['entrants'][$ordinal]['comment'];
+        return ['id' => $racer_id, 'name' => $racer_name, 'discriminator' => $racer_discriminator, 'time' => $racer_time, 'forfeit' => $racer_forfeit, 'team' => $racer_team,'comment'=> $racer_comment];
     }
 }
 
@@ -35,6 +75,7 @@ if (! function_exists("validateHash")) {
         'HashPendant', 'HashQuake', 'HashShield', 'HashShovel', 'HashSomaria', 'HashTunic'];
         $sahabot_pattern = '/^\(([a-zA-Z\s]+)\/([a-zA-Z\s]+)\/([a-zA-Z\s]+)\/([a-zA-Z\s]+)\/([a-zA-Z\s]+)\)$/';
         $mudora_pattern = '/^(Hash[A-Za-z]+)\s(Hash[A-Za-z]+)\s(Hash[A-Za-z]+)\s(Hash[A-Za-z]+)\s(Hash[A-Za-z]+)$/';
+        $ladder_pattern = '/^(Hash[A-Za-z]+)\/(Hash[A-Za-z]+)\/(Hash[A-Za-z]+)\/(Hash[A-Za-z]+)\/(Hash[A-Za-z]+)/';
         $normalize = array(
             "Key" => "Big_Key",
             "Big Key" => "Big_Key",
@@ -129,6 +170,14 @@ if (! function_exists("validateHash")) {
                 }
             }
             return $normalize[$matches[1]] . " " . $normalize[$matches[2]] . " " . $normalize[$matches[3]] . " " . $normalize[$matches[4]] . " " . $normalize[$matches[5]];
+        } elseif (preg_match($ladder_pattern, $hash)) {
+            preg_match($ladder_pattern, $hash, $matches);
+            for($i= 1; $i< 6; $i++) {
+                if (!in_array($matches[$i], $valid_hashes)) {
+                    return false;
+                }
+            }
+            return $normalize[$matches[1]] . " " . $normalize[$matches[2]] . " " . $normalize[$matches[3]] . " " . $normalize[$matches[4]] . " " . $normalize[$matches[5]];
         } else {
             return false;
         }
@@ -178,6 +227,34 @@ if (! function_exists("parseAlttprRaceData")) {
     }
 }
 
+if (! function_exists("parseLadderRaceData")) {
+    function parseLadderRaceData(array $data) {
+        $start_time = date("Y-m-d H:i:s", strtotime($data["started_at"]));
+        $description = $data['info_user'];
+        $info_bot = $data['info_bot'];
+        $team_race = $data['team_race'];
+        $ladder_pattern = '/^([A-Za-z0-9\_\/]+)\s\-\s(https\:\/\/.*)\s\-\s\((Hash[A-Za-z]+\/Hash[A-Za-z]+\/Hash[A-Za-z]+\/Hash[A-Za-z]+\/Hash[A-Za-z]+)\)/';
+        if (preg_match($ladder_pattern, $info_bot)) {
+            preg_match($ladder_pattern, $info_bot, $matches);
+            $mode = $matches[1];
+            $seed = $matches[2];
+            $hash = $matches[3];
+        } else {
+            return ['accepted' => false, 'name' => $data['name'], 'reason' => 'Didn\'t match an existing pattern'];
+        }
+        $parsed_hash = validateHash($hash);
+        if ($parsed_hash != false) {
+            if (Str::isUrl($seed)) {
+                return ['accepted' => true, 'name' => $data['name'], 'start_time' => $start_time, 'mode' => $mode, 'seed' => $seed, 'hash' => $parsed_hash, 'description' => $description, 'team_race' => $team_race];
+            } else {
+                return ['accepted' => false, 'name' => $data['name'], 'reason'=> "Seed not a valid URL"];
+            }
+        } else {
+            return ['accepted' => false, 'name' => $data['name'], 'reason' => 'Hash failed to validate'];
+        }
+    }
+}
+
 if (! function_exists('getResultData')) {
     function getResultData(array $data, int $ordinal){
         $racer_id = $data['entrants'][$ordinal]['user']['id'];
@@ -197,5 +274,24 @@ if (! function_exists('getResultData')) {
         $racer_team = $data['entrants'][$ordinal]['team'];
         $racer_comment = $data['entrants'][$ordinal]['comment'];
         return ['id' => $racer_id, 'name' => $racer_name, 'discriminator' => $racer_discriminator, 'time' => $racer_time, 'forfeit' => $racer_forfeit, 'team' => $racer_team,'comment'=> $racer_comment];
+    }
+}
+
+if (! function_exists('getModeData')) {
+    function getModeData($str) {
+        $url = "https://sahasrahbotapi.synack.live/presets/api/alttpr?preset=" . $str;
+        $response = Http::get($url);
+        $pattern = "/description:\s\"(.*)\"\n/";
+        $json = $response->json();
+        if (array_key_exists("data", $json)) {
+            if (preg_match($pattern, $json['data'])) {
+                preg_match($pattern, $json['data'], $matches);
+                return $matches[1];
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 }

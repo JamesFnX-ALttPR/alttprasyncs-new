@@ -1,3 +1,7 @@
+@use('Baspa\Timezones\Facades\Timezones')
+@php
+  $timezones = Timezones::toArray();
+@endphp
 <x-layout>
     <x-slot:title>Register</x-slot:title>
     <x-slot:heading>Create New Account</x-slot:heading>
@@ -32,6 +36,15 @@
         <div>
           <x-form-label for="password_confirmation">Confirm Password</x-form-label>
           <x-form-input type="password" name="password_confirmation" id="password_confirmation" required />
+        </div>
+        <div>
+          <x-form-label for="timezone">Timezone</x-form-label>
+          <select id="timezone" name="timezone" value="">
+            <option value="">Select your Timezone</option>
+@foreach ($timezones as $timezone => $details)
+            <option value="{{ $timezone }}">{!! $details !!}</option>
+@endforeach
+          </select>
         </div>
         <div>
           <x-form-label for="racer">Select Racetime Racer</x-form-label>

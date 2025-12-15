@@ -15,10 +15,11 @@ class SessionController extends Controller
     public function store(Request $request) {
         $attrs = $request->validate([
             "email" => ["required", "email"],
-            "password"=> ["required"]
+            "password"=> ["required"],
         ]);
+        $remember = $request->filled("remember");
 
-        $user = Auth::attempt($attrs);
+        $user = Auth::attempt($attrs, $remember);
 
         if (! $user) {
             throw ValidationException::withMessages([
@@ -28,7 +29,7 @@ class SessionController extends Controller
 
         request()->session()->regenerate();
 
-        return redirect('/races');
+        return redirect()->intended('/races');
     }
     public function destroy() {
         Auth::logout();

@@ -45,7 +45,6 @@ class RaceController extends Controller
         ]);
 
     }
-
     public function store(Request $request) {
         $attrs = $request->validate([
             'mode' => ['required', 'numeric'],
@@ -118,5 +117,13 @@ class RaceController extends Controller
         ]);
 
         return redirect('/race/' . $race->id);
+    }
+    public function edit(Race $race)
+    {
+        $modes = Mode::orderBy('name')->get();
+        return view('races.edit', [
+            'race' => $race,
+            'modes' => $modes
+        ]);
     }
 }

@@ -10,6 +10,9 @@
 @if($race->result_avg_time != null)
 Average Time - {{ date("G:i:s", $race->result_avg_time) }}</p><hr />
 @endif
+@if (DB::table('results')->where('race_id', $race->id)->whereNotNull('cr')->count() > 0)
+    
+@endif
 
         <x-table>
             <x-slot:thead>
@@ -17,6 +20,12 @@ Average Time - {{ date("G:i:s", $race->result_avg_time) }}</p><hr />
                     <x-table-th>Place</x-table-th>
                     <x-table-th>Name</x-table-th>
                     <x-table-th>Time</x-table-th>
+                    @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('cr')->count() > 0)
+                        <x-table-th>Collection Rate</x-table-th>
+                    @endif
+                    @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('vod')->count() > 0)
+                        <x-table-th>Link to VOD</x-table-th>
+                    @endif
                     <x-table-th>Comments</x-table-th>
                 </tr>
             </x-slot:thead>
@@ -33,8 +42,24 @@ $class = "bg-white border-b";
 @endif
                 <tr class="{{ $class }}">
                     <x-table-td>{{ $loop->iteration }}</x-table-td>
-                    <x-table-td><x-link href="/racer/{{ $result->racer->id }}">{{ $result->racer->name }}</x-link></x-table-td>
-                    <x-table-td>@if ($result->forfeit == 1)Forfeit @else{{ date("G:i:s", $result->time) }}@endif</x-table-td>
+                    <x-table-td :isBold="true"><x-link href="/racer/{{ $result->racer->id }}">{{ $result->racer->name }}</x-link></x-table-td>
+                    <x-table-td :isBold="true">@if ($result->forfeit == 1)Forfeit @else{{ date("G:i:s", $result->time) }}@endif</x-table-td>
+                    @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('cr')->count() > 0)
+                        <x-table-td>
+                            @if ($result->cr == null)
+                                N/A
+                            @else
+                                {{ $result->cr }}
+                            @endif
+                        </x-table-td>
+                    @endif
+                    @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('vod')->count() > 0)
+                        @if ($result->vod == null)
+                            <x-table-td>N/A</x-table-td>
+                        @else
+                            <x-table-td :isBold="true"><x-link href="{{ $result->vod }}">Watch VOD</x-link></x-table-td>
+                        @endif
+                    @endif
                     <x-table-td>{{ $result->comment }}</x-table-td>
                 </tr>
                 @endforeach

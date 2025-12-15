@@ -22,6 +22,7 @@ class User extends Authenticatable
         'display_name',
         'email',
         'password',
+        'timezone',
     ];
 
     /**
@@ -53,5 +54,9 @@ class User extends Authenticatable
 
     public function race() {
         return $this->hasMany(Race::class);
-    }    
+    }
+    
+    public function series() {
+        return $this->belongsToMany(Series::class);
+    }
 }

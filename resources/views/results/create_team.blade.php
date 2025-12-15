@@ -17,7 +17,7 @@ echo ')';
         </p>
         </div><hr />
         <div class="flex justify-center">
-            <form method="POST" action="/submitasync">
+            <form method="POST" action="/result">
                 @csrf
 
                 <input type="hidden" id="race_id" name="race_id" value="{{ $race->id }}" \>
@@ -36,9 +36,20 @@ echo ')';
                             <td class="px-2" colspan="2"><input type="text" id="team" name="team" /></td>
                         </tr>
                         <tr>
-                            <th class="text-right px-2"><label for="name1">Name:</label></th>
-                            <td class="px-2"><input type="text" id="name1" name="name1" placeholder="Your Name" /></td>
-                            <td class="px-2"><input type="text" id="name2" name="name2" placeholder="Their Name" /></td>
+                            <th class="text-right px-2"><label for="player2">Name:</label></th>
+                            <td class="px-2">{{ Auth::user()->racer->name }}@if (Auth::user()->racer->discriminator != null)
+#{{ Auth::user()->racer->discriminator }}    
+                            @endif</td>
+                            <td class="px-2">
+                                <select name="player2" value="{{ old('player2') }}">
+                                    <option value="">Select your teammate</option>
+@foreach ( DB::table('racers')->whereNot('id', Auth::user()->racer->id)->orderBy(DB::raw('LOWER("name")'))->get() as $racer)
+<option value="{{ $racer->id }}">{{ $racer->name }}@if ($racer->discriminator != null)
+#{{ $racer->discriminator }}    
+                            @endif</option>
+@endforeach
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <th class="text-right px-2"><label for="forfeit">Forfeit:</label></th>

@@ -3,7 +3,7 @@
         </p>
         </div><hr />
         <div class="flex justify-center">
-            <form class="max-w-sm mx-auto" method="POST" action="/submitasync">
+            <form class="max-w-sm mx-auto" method="POST" action="/result">
                 @csrf
 
                 <input type="hidden" id="race_id" name="race_id" value="{{ $race->id }}" \>

@@ -23,6 +23,7 @@
                                     <x-nav-link href="/races" :active="request()->is('races', 'race/*')">Races</x-nav-link>
                                     <x-nav-link href="/racers" :active="request()->is('racers', 'racer/*')">Racers</x-nav-link>
                                     <x-nav-link href="/modes" :active="request()->is('modes', 'mode/*')">Modes</x-nav-link>
+                                    <x-nav-link href="/series" :active="request()->is('series', 'series/*')">Series</x-nav-link>
                                 </div>
                             </div>
                         </div>

@@ -12,8 +12,8 @@ $date_label = '(GMT)';
 @endphp
 @endif
 <x-layout>
-    <x-slot:title>ALttPR Asyncs - {{ ucfirst($mode->name) }}</x-slot:title>
-    <x-slot:heading>{{ ucfirst($mode->name) }}</x-slot:heading>
+    <x-slot:title>ALttPR Asyncs - Races Created by {{ Auth::user()->display_name }}</x-slot:title>
+    <x-slot:heading>Races Created by {{ Auth::user()->display_name }}</x-slot:heading>
         <x-table>
             <x-slot:linkbar>{{ $races->links() }}</x-slot:linkbar>
             <x-slot:thead>
@@ -23,10 +23,7 @@ $date_label = '(GMT)';
                     <x-table-th>Mode</x-table-th>
                     <x-table-th>Hash</x-table-th>
                     <x-table-th>Download Seed</x-table-th>
-                    <x-table-th>Description</x-table-th>
-                    <x-table-th>Participants</x-table-th>
-                    <x-table-th>Submit Async</x-table-th>
-                    <x-table-th>View Results</x-table-th>
+                    <x-table-th colspan="3">Description</x-table-th>
                 </tr>
             </x-slot:thead>
             <x-slot:tbody>
@@ -64,9 +61,14 @@ $race_time_string = $race->start_time;
                         <x-table-td><x-hash-images hash="{{ $race->hash }}" /></x-table-td>
                         <x-table-td :isBold="true"><x-link target="_blank" href="{{ $race->seed }}">Download Seed</x-link></x-table-td>
                         <x-table-td>{{ Str::limit($race->description, 50, '...') }}@if($race->spoiler_race == 1 && $race->description != null) - <x-link target="_blank" href="{{ $race->spoiler_log }}">Download Spoiler Log</x-link>@elseif($race->spoiler_race == 1 && $race->description == null)<x-link target="_blank" href="{{ $race->spoiler_log }}">Download Spoiler Log</x-link>@endif</x-table-td>
-                        <x-table-td>{{ count($race->result) }}</x-table-td>
-                        <x-table-td :isBold="true"><x-link href="/result/{{ $race->id }}">Submit Async</x-link></x-table-td>
-                        <x-table-td :isBold="true"><x-link href="/race/{{ $race->id }}">View Results</x-link></x-table-td>
+                        <x-table-td><x-link-button href="/race/{{ $race->id }}/edit">Edit</x-link-button></x-table-td>
+                        <x-table-td>
+                            <form method="POST" action="/race/{{ $race->id }}">
+                                @csrf
+                                @method("DELETE")
+                                <button type="submit" class="w-auto text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">Delete</button>
+                            </form>
+                        </x-table-td>
                     </tr>
 @endforeach
                 </x-slot:tbody>

@@ -1,6 +1,7 @@
 @use('Illuminate\Support\Facades\DB')
 @php
 $teamresults = $race->result()->select('team', DB::raw('AVG(time) AS avg_time'))->groupBy('team')->orderBy('avg_time', 'ASC')->get();
+$colspan = 2;
 @endphp
 @if($race->description != null)
 {{ $race->description }}<br />
@@ -21,6 +22,18 @@ Average Time - {{ date("G:i:s", $race->result_avg_time) }}</p><hr />
                     <x-table-th>Place</x-table-th>
                     <x-table-th>Name</x-table-th>
                     <x-table-th>Time</x-table-th>
+                    @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('cr')->count() > 0)
+                        <x-table-th>Collection Rate</x-table-th>
+                        @php
+                        $colspan++;
+                        @endphp
+                    @endif
+                    @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('vod')->count() > 0)
+                        <x-table-th>Link to VOD</x-table-th>
+                        @php
+                        $colspan++;
+                        @endphp
+                    @endif
                     <x-table-th>Comments</x-table-th>
                 </tr>
             </x-slot:thead>
@@ -39,12 +52,12 @@ $class = "bg-white border-b";
 @endphp
 @endif
                     <tr class="{{ $class }}">
-                        <x-table-td isBold=true>{{ $loop->iteration }}</x-table-td>
-                        <x-table-td isBold=true>{{ $team->team }}</x-table-td>
+                        <x-table-td :isBold="true">{{ $loop->iteration }}</x-table-td>
+                        <x-table-td :isBold="true">{{ $team->team }}</x-table-td>
 @if (DB::table('results')->where('race_id', $race->id)->where('team', $team->team)->max('forfeit') == 1)
-                        <x-table-td colspan="2" isBold=true>Forfeit</x-table-td>
+                        <x-table-td colspan="{{ $colspan }}" :isBold="true">Forfeit</x-table-td>
 @else
-                        <x-table-td colspan="2" isBold=true>{{ date("G:i:s", round($team->avg_time)) }}</x-table-td>
+                        <x-table-td colspan="{{ $colspan }}" :isBold="true">{{ date("G:i:s", round($team->avg_time)) }}</x-table-td>
 @endif
                     </tr>
                     @foreach ($race->result()->where('team', $team->team)->get() as $result)
@@ -58,6 +71,22 @@ Forfeit
 {{ date("G:i:s", $result->time) }}
 @endif
                         </x-table-td>
+                        @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('cr')->count() > 0)
+                        <x-table-td>
+                            @if ($result->cr == null)
+                                N/A
+                            @else
+                                {{ $result->cr }}
+                            @endif
+                        </x-table-td>
+                    @endif
+                    @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('vod')->count() > 0)
+                        @if ($result->vod == null)
+                            <x-table-td>N/A</x-table-td>
+                        @else
+                            <x-table-td :isBold="true"><x-link href="{{ $result->vod }}">Watch VOD</x-link></x-table-td>
+                        @endif
+                    @endif
                         <x-table-td>{{ $result->comment }}</x-table-td>
                     </tr>                    
                     @endforeach
