@@ -101,8 +101,6 @@ class SeriesController extends Controller
         return redirect('/series/' . $series->id);
     }
     public function destroy($series) {
-        // authorize
-        
         $series = Series::findOrFail($series);
         $series->delete();
         return redirect('/series');

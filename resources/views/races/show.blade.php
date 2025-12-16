@@ -13,9 +13,6 @@ $hash_array = explode(' ', $race->hash);
             <x-link href="https://racetime.gg/{{ $race->name }}">{{ Str::after($race->name, '/') }}</x-link>
         @else
             {{ $race->name }}
-            @can('edit', $race)
-                <x-link-button href="/race/{{ $race->id }}/edit">Edit Race</x-link-button>
-            @endcan
         @endif
         @can('edit', $race)
             <x-link-button href="/race/{{ $race->id }}/edit">Edit Race</x-link-button>

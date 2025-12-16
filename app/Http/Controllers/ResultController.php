@@ -115,4 +115,39 @@ class ResultController extends Controller
         }
         return redirect('/race/' . $attrs['race_id']);
     }
+    public function edit(Result $result)
+    {
+        $result->load('race');
+        return view('results.edit', ['result'=> $result]);
+    }
+    public function update(Request $request, Result $result)
+    {
+        $attrs = $request->validate([
+            'time' => 'required_unless:forfeit,1|regex:/^[0-9]?\:?[0-9]{1,2}\:[0-9]{1,2}$/|nullable',
+            'forfeit' => 'nullable',
+            'comment' => 'nullable',
+            'vod' => 'nullable|url',
+            'cr'=> 'nullable',
+        ], [
+            'time.required_unless'=> 'A finish time is required. If you forfeitted the race, please check the Forfeit box instead.',
+            'time.regex' => 'Your time is in an invalid format. Please enter the time in H:MM:SS. If your result is under 1 hour, you may enter in MM:SS.',
+            'vod.url'=> 'Your VOD link is not a valid URL.',
+        ]);
+        if (isset ($attrs['forfeit'])) {
+            $time = 99999;
+            $forfeit = 1;
+        } else {
+            $forfeit = 0;
+            $time_exploded = explode(':', $attrs['time']);
+            $time = (intval($time_exploded[0]) * 3600) + intval(($time_exploded[1]) * 60) + intval($time_exploded[2]);
+        }
+        $result->time = $time;
+        $result->forfeit = $forfeit;
+        $result->cr = $attrs['cr'];
+        $result->vod = $attrs['vod'];
+        $result->comment = $attrs['comment'];
+        $result->save();
+
+        return redirect('/race/' . $result->race_id);
+    }
 }

@@ -11,10 +11,7 @@ use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SeriesController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    $response = Http::withoutVerifying()->get('https://botofmudora.s3.us-east-1.amazonaws.com/seeds/6416936a-ec4a-4106-81d4-fc3521b81a1c/OR_886386512_Spoiler_Hookshot-Shovel-Heart-Map-Pendant.json');
-    dd($response->status());
-});
+Route::get('/', [RaceController::class,'index'])->name('home');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
 Route::get('/dashboard/results', [DashboardController::class,'results_index'])->middleware('auth');
@@ -39,7 +36,11 @@ Route::get('/race/{race}/edit', [RaceController::class,'edit'])
     ->middleware('auth')
     ->can('edit', 'race');
 
-Route::patch('/race/{race}', [RaceController::class,'edit'])
+Route::patch('/race/{race}', [RaceController::class,'update'])
+    ->middleware('auth')
+    ->can('edit', 'race');
+
+Route::delete('/race/{race}', [RaceController::class,'destroy'])
     ->middleware('auth')
     ->can('edit', 'race');
 
@@ -50,6 +51,14 @@ Route::get('/mode/{id}', [ModeController::class,'show']);
 
 Route::get('/result/{id}', [ResultController::class,'create']);
 Route::post('/result', [ResultController::class,'store']);
+Route::get('/result/{result}/edit', [ResultController::class,'edit']);
+Route::patch('/result/{result}', [ResultController::class,'update'])
+    ->middleware('auth')
+    ->can('edit', 'result');
+
+Route::delete('/result/{result}', [ResultController::class,'destroy'])
+    ->middleware('auth')
+    ->can('edit', 'result');
 
 Route::get('/register', [RegisteredUserController::class,'create']);
 Route::post('/register', [RegisteredUserController::class,'store']);

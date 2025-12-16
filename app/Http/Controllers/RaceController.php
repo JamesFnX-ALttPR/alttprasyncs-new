@@ -126,4 +126,59 @@ class RaceController extends Controller
             'modes' => $modes
         ]);
     }
+    public function update(Request $request, Race $race)
+    {
+        $attrs = $request->validate([
+            'mode' => ['required', 'numeric'],
+            'new_mode' => ['nullable', 'required_if:mode,0'],
+            'seed' => ['required','url'],
+            'description' => ['nullable'],
+            'hash_1' => ['required'],
+            'hash_2' => ['required'],
+            'hash_3' => ['required'],
+            'hash_4' => ['required'],
+            'hash_5' => ['required'],
+            'team_race' => ['nullable'],
+            'spoiler_race'=> ['nullable'],
+            'spoiler_log'=> ['nullable', 'url', 'required_if:spoiler_race,1'],
+        ]);
+
+        if ($attrs['mode'] == 0) {
+            $mode = Mode::create([
+                'name' => $attrs['new_mode'],
+            ]);
+            $mode_id = $mode->id;
+        } else {
+            $mode_id = $attrs['mode'];
+        }
+
+        if (array_key_exists('team_race',$attrs) && $attrs['team_race'] == 1) {
+            $team_race = 1;
+        } else {
+            $team_race = 0;
+        }
+        if (array_key_exists('spoiler_race',$attrs) && $attrs['spoiler_race'] == 1) {
+            $spoiler_race = 1;
+        } else {
+            $spoiler_race = 0;
+        }
+
+        $hash_string = $attrs['hash_1'] . ' ' . $attrs['hash_2'] . ' ' . $attrs['hash_3'] . ' ' . $attrs['hash_4'] . ' ' . $attrs['hash_5'];
+        
+        $race->mode_id = $mode_id;
+        $race->seed = $attrs['seed'];
+        $race->description = $attrs['description'];
+        $race->hash = $hash_string;
+        $race->team_race = $team_race;
+        $race->spoiler_race = $spoiler_race;
+        $race->spoiler_log = $attrs['spoiler_log'];
+        $race->save();
+
+        return redirect('/race/' . $race->id);
+    }
+    public function destroy(Race $race) {
+        $race = Race::findOrFail($race->id);
+        $race->delete();
+        return redirect('/dashboard/races');
+    }
 }

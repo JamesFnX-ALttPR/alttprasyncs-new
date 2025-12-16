@@ -2,8 +2,9 @@
     <x-slot:title>Edit {{ $race->name }}</x-slot:title>
     <x-slot:heading>Edit {{ $race->name }}</x-slot:heading>
     <div class="justify-center">
-        <form class="max-w-2/5 mx-auto" method="POST" action="/races/{{ $race->id }}/edit">
+        <form class="max-w-2/5 mx-auto" method="POST" action="/race/{{ $race->id }}">
             @csrf
+            @method('PATCH')
             
             <div class="mb-5">
                 <x-form-label for="mode">Mode</x-form-label>

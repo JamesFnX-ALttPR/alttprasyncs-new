@@ -29,11 +29,11 @@ class SessionController extends Controller
 
         request()->session()->regenerate();
 
-        return redirect()->intended('/races');
+        return redirect()->intended('/dashboard');
     }
     public function destroy() {
         Auth::logout();
 
-        return redirect("/races");
+        return redirect("/");
     }
 }
