@@ -150,4 +150,14 @@ class ResultController extends Controller
 
         return redirect('/race/' . $result->race_id);
     }
+    public function destroy(Request $request, Result $result)
+    {
+        $result->load('race');
+        if ($result->race->team_race == 1) {
+            $result2 = Result::where('race_id', $result->race_id)->where('team', $result->team)->whereNot('id', $result->id)->first();
+            $result2->delete();
+        }
+        $result->delete();
+        return redirect('/race/'. $result->race_id);
+    }
 }
