@@ -67,8 +67,8 @@ $race_time_string = $race->start_time;
                                     <x-table-td :isBold="true"><x-link target="_blank" href="{{ $race->seed }}">Download Seed</x-link></x-table-td>
                                     <x-table-td>{{ Str::limit($race->description, 50, '...') }}@if($race->spoiler_race == 1 && $race->description != null) - <x-link target="_blank" href="{{ $race->spoiler_log }}">Download Spoiler Log</x-link>@elseif($race->spoiler_race == 1 && $race->description == null)<x-link target="_blank" href="{{ $race->spoiler_log }}">Download Spoiler Log</x-link>@endif</x-table-td>
                                     <x-table-td>{{ $race->result_count }}</x-table-td>
-                                    <x-table-td :isBold="true"><x-link href="/result/{{ $race->id }}">Submit Async</x-link></x-table-td>
-                                    <x-table-td :isBold="true"><x-link href="/race/{{ $race->id }}">View Results</x-link></x-table-td>
+                                    <x-table-td><x-link-button href="/result/{{ $race->id }}">Submit Async</x-link-button></x-table-td>
+                                    <x-table-td><x-link-button href="/race/{{ $race->id }}">View Results</x-link-button></x-table-td>
                                 </tr>
 @endforeach
             </x-slot:tbody>
