@@ -1,0 +1,2 @@
+@props(['type' => 'submit'])
+<button type="{{ $type }}" {{ $attributes->merge(['class' => 'w-24 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm py-1.25 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800']) }}>{{ $slot }}</button>

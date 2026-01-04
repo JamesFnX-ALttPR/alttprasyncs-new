@@ -9,6 +9,7 @@ use App\Http\Controllers\RacerController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SeriesController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [RaceController::class,'index'])->name('home');
@@ -67,6 +68,8 @@ Route::get('/login', [SessionController::class,'create'])->name('login');
 Route::post('/login', [SessionController::class,'store']);
 
 Route::post('/logout', [SessionController::class,'destroy'])->name('logout');
+
+Route::post('/search', [SearchController::class,'search']);
 
 Route::get('/series', [SeriesController::class,'index']);
 Route::get('/series/create', [SeriesController::class,'create'])

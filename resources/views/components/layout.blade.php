@@ -24,6 +24,13 @@
                                     <x-nav-link href="/racers" :active="request()->is('racers', 'racer/*')">Racers</x-nav-link>
                                     <x-nav-link href="/modes" :active="request()->is('modes', 'mode/*')">Modes</x-nav-link>
                                     <x-nav-link href="/series" :active="request()->is('series', 'series/*')">Series</x-nav-link>
+                                    <form method="POST" action="/search">
+                                        @csrf
+                                        <div class="grid grid-cols-2">
+                                            <div><x-form-nav-search-input size="20" id="search" name="search" /></div>
+                                            <div><x-form-nav-search-button type="submit">Search</x-form-nav-search-button></div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>

@@ -6,7 +6,7 @@ $hash_array = explode(' ', $race->hash);
 @endphp
 <x-layout>
     <x-slot:title>
-        ALttPR Asyncs - {{ $race->name }}
+        {{ $race->name }}
     </x-slot:title>
     <x-slot:heading>
         Results for @if ($race->from_racetime == 1)
