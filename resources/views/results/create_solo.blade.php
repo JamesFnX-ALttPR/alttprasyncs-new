@@ -24,8 +24,8 @@
                     <x-form-input id="comment" name="comment" value="{{ old('comment') }}" />
                     <x-form-error type="comment" />
                     <div class="flex items-center mb-4">
-                        <x-form-input class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft" type="checkbox" id="forfeit" name="forfeit" value="1" onclick="if (this.checked) { document.getElementsByClassName('hide-on-forfeit')[0].style.display = 'none'; } else { document.getElementsByClassName('hide-on-forfeit')[0].style.display = 'block'; }" />
-                        <x-form-label class="ms-2 text-sm font-medium text-heading select-none" for="forfeit">Check for Forfeit</x-form-label>
+                        <x-form-checkbox class="w-4 h-4 border border-default-medium rounded-xs bg-neutral-secondary-medium focus:ring-2 focus:ring-brand-soft" type="checkbox" id="forfeit" name="forfeit" value="1" onclick="if (this.checked) { document.getElementsByClassName('hide-on-forfeit')[0].style.display = 'none'; } else { document.getElementsByClassName('hide-on-forfeit')[0].style.display = 'block'; }" />
+                        <x-form-label class="ms-2 text-sm font-bold text-heading select-none" for="forfeit">Check for Forfeit</x-form-label>
                     </div>
                     <x-form-button>Submit Result</x-form-button>
                     

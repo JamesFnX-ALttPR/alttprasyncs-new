@@ -12,7 +12,7 @@ $date_label = '(GMT)';
 @endphp
 @endif
 <x-layout>
-    <x-slot:title>ALttPR Asyncs - Races</x-slot:title>
+    <x-slot:title>Races</x-slot:title>
     <x-slot:heading>Races @auth<span class="px-10"><x-link-button href="/races/create">Create Race</x-link-button></span>@endauth</x-slot:heading>
         <x-table>
             <x-slot:linkbar>

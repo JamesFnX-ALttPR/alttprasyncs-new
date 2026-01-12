@@ -12,16 +12,16 @@
         Average Time - {{ date("G:i:s", $raceresult->result_avg_time) }}</p><hr />
 
         <div class="flex justify-center">
-            <table class="w-full max-w-3/4 mx-auto border-collapse border border-gray-400 rounded-md">
-                <thead>
+            <x-table>
+                <x-slot:thead>
                     <tr>
-                        <th class="border border-gray-300 px-2 py-2">Place</th>
-                        <th class="border border-gray-300 px-2 py-2">Name</th>
-                        <th class="border border-gray-300 px-2 py-2">Time</th>
-                        <th class="border border-gray-300 px-2 py-2">Comments</th>
+                        <x-table-th class="border border-gray-300 px-2 py-2">Place</x-table-th>
+                        <x-table-th class="border border-gray-300 px-2 py-2">Name</x-table-th>
+                        <x-table-th class="border border-gray-300 px-2 py-2">Time</x-table-th>
+                        <x-table-th class="border border-gray-300 px-2 py-2">Comments</x-table-th>
                     </tr>
-                </thead>
-                <tbody>
+                </x-slot:thead>
+                <x-slot:tbody>
                     @foreach ($raceresult->result as $result)
                     @if($loop->iteration % 2 == 0)
                     @php
@@ -32,13 +32,13 @@
                     $class = "bg-gray-800 border border-gray-300 px-2 py-1";
                     @endphp
                     @endif
-                    <tr>
-                        <td class="{{ $class }}">{{ $loop->iteration }}</td>
-                        <td class="{{ $class }}"><a class="text-blue-300 hover:underline" href="/racer/{{ $result->racer->id }}">{{ $result->racer->name }}</a></td>
-                        <td class="{{ $class }}">@if ($result->forfeit == 1)Forfeit @else{{ date("G:i:s", $result->time) }}@endif</td>
-                        <td class="{{ $class }}">{{ $result->comment }}</td>
+                    <tr class="{{ $class }}">
+                        <x-table-td>{{ $loop->iteration }}</x-table-td>
+                        <x-table-td !isBold="true"><x-link href="/racer/{{ $result->racer->id }}">{{ $result->racer->name }}</x-link></x-table-td>
+                        <x-table-td !isBold="true">@if ($result->forfeit == 1)Forfeit @else{{ date("G:i:s", $result->time) }}@endif</x-table-td>
+                        <x-table-td>{{ $result->comment }}</x-table-td>
                     </tr>
                     @endforeach
-                </tbody>
-            </table>
+                </x-slot:tbody>
+            </x-table>
         </div>

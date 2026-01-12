@@ -42,14 +42,29 @@ Average Time - {{ date("G:i:s", $race->result_avg_time) }}</p><hr />
 $subclass = "bg-gray-600 border border-gray-200 px-2 py-1";
 @endphp
 @foreach ($teamresults as $team)
+@php
+    $racetimeCheck = $race->result()->where('team', $team->team)->first();
+@endphp
 @if($loop->iteration % 2 != 0)
-@php
-$class = "bg-gray-100 border-b";
-@endphp
+    @if($racetimeCheck->from_racetime == 0)
+        @php
+            $class = "bg-sky-200 border-b";
+        @endphp
+    @else
+        @php
+            $class = "bg-gray-100 border-b";
+        @endphp
+    @endif
 @else
-@php
-$class = "bg-white border-b";
-@endphp
+    @if($racetimeCheck->from_racetime == 0)
+        @php
+            $class = "bg-sky-100 border-b";
+        @endphp
+    @else
+        @php
+            $class = "bg-white border-b";
+        @endphp
+    @endif
 @endif
                     <tr class="{{ $class }}">
                         <x-table-td :isBold="true">{{ $loop->iteration }}</x-table-td>

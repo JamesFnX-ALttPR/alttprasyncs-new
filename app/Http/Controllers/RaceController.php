@@ -7,10 +7,12 @@ use App\Models\Mode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Kyslik\ColumnSortable\Sortable;
 
 
 class RaceController extends Controller
 {
+    use Sortable;
     // Index
     public function index()
     {
