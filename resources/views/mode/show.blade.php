@@ -18,15 +18,22 @@ $date_label = '(GMT)';
             <x-slot:linkbar>{{ $races->links() }}</x-slot:linkbar>
             <x-slot:thead>
                 <tr>
-                    <x-table-th>Date {{ $date_label }}</x-table-th>
-                    <x-table-th>Race Name</x-table-th>
-                    <x-table-th>Mode</x-table-th>
+                    <x-table-th>
+                        <div class="text-blue-700 hover:underline">
+                            @sortablelink('start_time', 'Date') {{ $date_label }}
+                        </div>
+                    </x-table-th>
+                    <x-table-th>Name</x-table-th>
                     <x-table-th>Hash</x-table-th>
                     <x-table-th>Download Seed</x-table-th>
                     <x-table-th>Description</x-table-th>
-                    <x-table-th>Participants</x-table-th>
-                    <x-table-th>Submit Async</x-table-th>
-                    <x-table-th>View Results</x-table-th>
+                    <x-table-th>
+                        <div class="text-blue-700 hover:underline">
+                            @sortablelink('result_count', 'Participants')
+                        </div>
+                    </x-table-th>
+                    <x-table-th></x-table-th>
+                    <x-table-th></x-table-th>
                 </tr>
             </x-slot:thead>
             <x-slot:tbody>
@@ -59,14 +66,12 @@ $race_time_string = $race->start_time;
 {{ $race->name }}
 @endif
                         </x-table-td>
-                        <x-table-td :isBold="true"><x-link href="/mode/{{ $race->mode->id }}">@if($race->team_race == 1)coop @endif
-@if($race->spoiler_race == 1)spoiler @endif{{ $race->mode->name }}</x-link></x-table-td>
                         <x-table-td><x-hash-images hash="{{ $race->hash }}" /></x-table-td>
                         <x-table-td :isBold="true"><x-link target="_blank" href="{{ $race->seed }}">Download Seed</x-link></x-table-td>
                         <x-table-td>{{ Str::limit($race->description, 50, '...') }}@if($race->spoiler_race == 1 && $race->description != null) - <x-link target="_blank" href="{{ $race->spoiler_log }}">Download Spoiler Log</x-link>@elseif($race->spoiler_race == 1 && $race->description == null)<x-link target="_blank" href="{{ $race->spoiler_log }}">Download Spoiler Log</x-link>@endif</x-table-td>
                         <x-table-td>{{ count($race->result) }}</x-table-td>
-                        <x-table-td :isBold="true"><x-link href="/result/{{ $race->id }}">Submit Async</x-link></x-table-td>
-                        <x-table-td :isBold="true"><x-link href="/race/{{ $race->id }}">View Results</x-link></x-table-td>
+                        <x-table-td :isBold="true"><x-link-button href="/result/{{ $race->id }}">Submit Async</x-link-button></x-table-td>
+                        <x-table-td :isBold="true"><x-link-button href="/race/{{ $race->id }}">View Results</x-link-button></x-table-td>
                     </tr>
 @endforeach
                 </x-slot:tbody>

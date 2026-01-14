@@ -22,7 +22,7 @@ class ModeController extends Controller
     {
         return view('mode.show', [
             'mode' => Mode::where('id', $id)->first(),
-            'races' => Race::where('mode_id', $id)->withCount('result')->orderBy('start_time', 'DESC')->paginate(20),
+            'races' => Race::where('mode_id', $id)->withCount('result')->sortable(['start_time' => 'desc', 'result_count'])->paginate(20),
         ]);
     }
 }

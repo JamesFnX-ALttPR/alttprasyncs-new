@@ -7,16 +7,13 @@ use App\Models\Mode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Kyslik\ColumnSortable\Sortable;
 
 
 class RaceController extends Controller
 {
-    use Sortable;
-    // Index
     public function index()
     {
-        $races = Race::with('mode')->withCount('result')->orderBy('start_time', 'DESC')->paginate(20);
+        $races = Race::with('mode')->withCount('result')->sortable(['start_time' => 'desc', 'result_count'])->paginate(20);
 
         return view('races.index', [
             'races' => $races,
