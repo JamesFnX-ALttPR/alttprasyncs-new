@@ -12,23 +12,36 @@ $date_label = '(GMT)';
 @endphp
 @endif
 <x-layout>
-    <x-slot:title>ALttPR Asyncs - {{ ucfirst($mode->name) }}</x-slot:title>
+    <x-slot:title>{{ ucfirst($mode->name) }}</x-slot:title>
     <x-slot:heading>{{ ucfirst($mode->name) }}</x-slot:heading>
+        <form method="GET" action="/mode/{{ $mode->id }}">
+            <div class="grid grid-cols-2 justify-center w-100 mx-auto gap-4 place-items-center">
+                <div class="shrink">
+                    <select id="excludeRacer" name="excludeRacer">
+                        <option value=""></option>
+@foreach($racers as $racer)
+                        <option value="{{ $racer->id }}">{{ $racer->name }}</option>
+@endforeach
+                    </select>
+                </div>
+                <div class="shrink">
+                    <x-form-button>Exclude Racer</x-form-button>
+                </div>
+            </div>
+        </form>
         <x-table>
             <x-slot:linkbar>{{ $races->links() }}</x-slot:linkbar>
             <x-slot:thead>
                 <tr>
                     <x-table-th>
-                        <div class="text-blue-700 hover:underline">
-                            @sortablelink('start_time', 'Date') {{ $date_label }}
-                        </div>
+                        <span class="text-blue-700 font-semibold hover:underline">@sortablelink('start_time', 'Date')</span> {{ $date_label }}
                     </x-table-th>
                     <x-table-th>Name</x-table-th>
                     <x-table-th>Hash</x-table-th>
                     <x-table-th>Download Seed</x-table-th>
                     <x-table-th>Description</x-table-th>
                     <x-table-th>
-                        <div class="text-blue-700 hover:underline">
+                        <div class="text-blue-700 font-semibold hover:underline">
                             @sortablelink('result_count', 'Participants')
                         </div>
                     </x-table-th>

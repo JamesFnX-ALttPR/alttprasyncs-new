@@ -190,8 +190,8 @@ if (! function_exists("parseAlttprRaceData")) {
         $description = $data['info_user'];
         $info_bot = $data['info_bot'];
         $team_race = $data['team_race'];
-        $sahabot_pattern = "/^([A-Za-z0-9\-\_\/\s]+[A-Za-z0-9])\s?\-?\s?(https\:\/\/[A-Za-z0-9\/\.]+[A-Za-z0-9])\s?\-?\s?(\([A-Za-z\s]+\/[A-Za-z\s]+\/[A-Za-z\s]+\/[A-Za-z\s]+\/[A-Za-z\s]+\))$/";
-        $mudora_pattern = "/^([A-Za-z0-9\/\_\-\s]+[A-Za-z0-9])?\s?\-?\s?(Hash[A-Za-z]+\sHash[A-Za-z]+\sHash[A-Za-z]+\sHash[A-Za-z]+\sHash[A-Za-z]+)\n(https\:\/\/.+)\n?\[?([A-Za-z0-9\s\n\.\:\-\/\_]*)?\]?$/";
+        $sahabot_pattern = "/^([A-Za-z0-9\-\_\/\s\.]+[A-Za-z0-9])\s?\-?\s?(https\:\/\/[A-Za-z0-9\/\.]+[A-Za-z0-9])\s?\-?\s?(\([A-Za-z\s]+\/[A-Za-z\s]+\/[A-Za-z\s]+\/[A-Za-z\s]+\/[A-Za-z\s]+\))$/";
+        $mudora_pattern = "/^([A-Za-z0-9\/\_\-\s\.]+[A-Za-z0-9])?\s?\-?\s?(Hash[A-Za-z]+\sHash[A-Za-z]+\sHash[A-Za-z]+\sHash[A-Za-z]+\sHash[A-Za-z]+)\n(https\:\/\/.+)\n?\[?([A-Za-z0-9\s\n\.\:\-\/\_]*)?\]?$/";
         if (preg_match($sahabot_pattern, $info_bot)) {
             preg_match($sahabot_pattern, $info_bot, $matches);
             $mode = $matches[1];
@@ -233,7 +233,7 @@ if (! function_exists("parseLadderRaceData")) {
         $description = $data['info_user'];
         $info_bot = $data['info_bot'];
         $team_race = $data['team_race'];
-        $ladder_pattern = '/^([A-Za-z0-9\_\/]+)\s\-\s(https\:\/\/.*)\s\-\s\((Hash[A-Za-z]+\/Hash[A-Za-z]+\/Hash[A-Za-z]+\/Hash[A-Za-z]+\/Hash[A-Za-z]+)\)/';
+        $ladder_pattern = '/^([A-Za-z0-9\_\/\.]+)\s\-\s(https\:\/\/.*)\s\-\s\((Hash[A-Za-z]+\/Hash[A-Za-z]+\/Hash[A-Za-z]+\/Hash[A-Za-z]+\/Hash[A-Za-z]+)\)/';
         if (preg_match($ladder_pattern, $info_bot)) {
             preg_match($ladder_pattern, $info_bot, $matches);
             $mode = $matches[1];

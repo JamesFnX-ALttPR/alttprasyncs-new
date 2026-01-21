@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>ALttPR Asyncs - Series</x-slot:title>
+    <x-slot:title>Series</x-slot:title>
     <x-slot:heading>Series</x-slot:heading>
     <x-table>
         <x-slot:linkbar>{{ $series->links() }}</x-slot:linkbar>

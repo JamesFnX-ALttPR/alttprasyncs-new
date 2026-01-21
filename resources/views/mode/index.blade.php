@@ -1,6 +1,6 @@
 @use('Illuminate\Support\Str')
 <x-layout>
-    <x-slot:title>ALttPR Asyncs - Modes</x-slot:title>
+    <x-slot:title>Modes</x-slot:title>
     <x-slot:heading>Modes</x-slot:heading>
         <x-table>
             <x-slot:linkbar>{{ $modes->links() }}</x-slot:linkbar>

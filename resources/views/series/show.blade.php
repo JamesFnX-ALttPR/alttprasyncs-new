@@ -13,7 +13,7 @@ $date_label = '(GMT)';
 @endphp
 @endif
 <x-layout>
-    <x-slot:title>ALttPR Asyncs - {{ $series->name }}</x-slot:title>
+    <x-slot:title>{{ $series->name }}</x-slot:title>
     <x-slot:heading>
         {{ $series->name }}
 @can('edit', $series)

@@ -1,5 +1,19 @@
+@use('Carbon\Carbon')
+@php
+$race_time = new Carbon(new DateTime($race->start_time));
+@endphp
+@if (! Auth::guest() && Auth::user()->timezone != null)
+@php
+$race_time_string = $race_time->setTimezone(Auth::user()->timezone)->format('F j, Y g:i:s A');
+@endphp
+@else
+@php
+$race_time_string = $race_time->format('F j, Y g:i:s A');
+@endphp
+@endif
+<span class="font-bold">{{ $race_time_string }}</span><br />
 @if($race->description != null)
-{{ $race->description }}<br />
+<span class="font-semibold">{{ $race->description }}</span><br />
 @endif
 <x-hash-images size="30" hash="{{ $race->hash }}" /><br />
 <x-link target="_blank" href="{{ $race->seed }}">Download Seed</x-link><br />
@@ -31,26 +45,41 @@ Average Time - {{ date("G:i:s", $race->result_avg_time) }}</p><hr />
             </x-slot:thead>
             <x-slot:tbody>
 @foreach ($race->result as $result)
-@if($loop->iteration % 2 != 0)
-    @if($result->from_racetime == 0)
-        @php
-            $class = "bg-sky-200 border-b";
-        @endphp
-    @else
-        @php
-            $class = "bg-gray-100 border-b";
-        @endphp
-    @endif
-@else
-    @if($result->from_racetime == 0)
-        @php
-            $class = "bg-sky-100 border-b";
-        @endphp
-    @else
-        @php
-            $class = "bg-white border-b";
-        @endphp
-    @endif
+{{-- First Place - bg-amber-100
+     Second Place - bg-slate-200
+     Third Place - bg-orange-100
+     Asynced Results - bg-sky-100/200
+     Racetime Results - bg-gray-100 and bg-white --}}
+@if ($loop->iteration == 1)
+    @php
+        $class = "bg-amber-100 border-b";
+    @endphp
+@elseif ($loop->iteration == 2)
+    @php
+        $class = "bg-slate-200 border-b";
+    @endphp
+@elseif ($loop->iteration == 3)
+    @php
+        $class = "bg-orange-100 border-b";
+    @endphp
+@endif
+@if ($loop->iteration % 2 != 0 && $loop->iteration > 3)
+    @php
+        $class = "bg-gray-100 border-b";
+    @endphp
+@elseif ($loop->iteration % 2 == 0 && $loop->iteration > 3)
+    @php
+        $class = "bg-white border-b";
+    @endphp
+@endif
+@if($loop->iteration % 2 != 0 && $result->from_racetime == 0)
+    @php
+        $class = "bg-sky-200 border-b";
+    @endphp
+@elseif ($loop->iteration % 2 == 0 && $result->from_racetime == 0)
+    @php
+        $class = "bg-sky-100 border-b";
+    @endphp
 @endif
                 <tr class="{{ $class }}">
                     <x-table-td>{{ $loop->iteration }}</x-table-td>

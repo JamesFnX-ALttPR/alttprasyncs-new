@@ -6,7 +6,7 @@ $hash_array = explode(' ', $raceresult->hash);
 @endphp
 <x-layout>
     <x-slot:title>
-        ALttPR Asyncs - {{ $raceresult->name }}
+        {{ $raceresult->name }}
     </x-slot:title>
         <h1>Race Results</h1>
         <p class="text-center"><strong>Results for <a class="text-blue-300 hover:underline" target="_blank" href="https://racetime.gg/{{ $raceresult->name }}">{{ $raceresult->name }}</a></strong><br />

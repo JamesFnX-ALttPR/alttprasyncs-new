@@ -1,5 +1,5 @@
 <x-layout>
-    <x-slot:title>ALttPR Asyncs - Racers</x-slot:title>
+    <x-slot:title>Racers</x-slot:title>
     <x-slot:heading>Racers</x-slot:heading>
     <x-table>
         <x-slot:linkbar>{{ $racers->links() }}</x-slot:linkbar>

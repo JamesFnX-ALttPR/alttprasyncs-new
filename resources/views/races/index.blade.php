@@ -21,7 +21,7 @@ $date_label = '(GMT)';
             <x-slot:thead>
                 <tr>
                     <x-table-th>
-                        <div class="text-blue-700 hover:underline">
+                        <div class="text-blue-700 font-semibold hover:underline">
                             @sortablelink('start_time', 'Date') {{ $date_label }}
                         </div>
                     </x-table-th>   
@@ -31,7 +31,7 @@ $date_label = '(GMT)';
                     <x-table-th>Download Seed</x-table-th>
                     <x-table-th>Description</x-table-th>
                     <x-table-th>
-                        <div class="text-blue-700 hover:underline">
+                        <div class="text-blue-700 font-semibold hover:underline">
                             @sortablelink('result_count', 'Participants')
                         </div>
                     </x-table-th>

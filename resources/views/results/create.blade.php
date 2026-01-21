@@ -12,7 +12,7 @@ if ($race->team_race == 1) {
 }
 @endphp
 <x-layout>
-    <x-slot:title>ALttPR Asyncs - Submit Result for {{ Str::after( $race->name, '/') }}</x-slot:title>
+    <x-slot:title>Submit Result for {{ Str::after( $race->name, '/') }}</x-slot:title>
     <x-slot:heading>Submit Result for {{ $race->name }}</x-slot:heading>
     <p>{{ $race->description }}</p>
     <p><x-link target="_blank" href="{{ $race->seed }}">Download Seed</x-link></p>

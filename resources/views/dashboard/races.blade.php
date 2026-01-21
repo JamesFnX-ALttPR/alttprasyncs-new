@@ -12,7 +12,7 @@ $date_label = '(GMT)';
 @endphp
 @endif
 <x-layout>
-    <x-slot:title>ALttPR Asyncs - Races Created by {{ Auth::user()->display_name }}</x-slot:title>
+    <x-slot:title>Races Created by {{ Auth::user()->display_name }}</x-slot:title>
     <x-slot:heading>Races Created by {{ Auth::user()->display_name }}</x-slot:heading>
         <x-table>
             <x-slot:linkbar>{{ $races->links() }}</x-slot:linkbar>

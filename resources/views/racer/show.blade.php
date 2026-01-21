@@ -12,14 +12,14 @@ $date_label = '(GMT)';
 @endphp
 @endif
 <x-layout>
-    <x-slot:title>ALttPR Asyncs - {{ $racer->name }}</x-slot:title>
+    <x-slot:title>{{ $racer->name }}</x-slot:title>
     <x-slot:heading>Races for {{ $racer->name }}</x-slot:heading>
         <x-table>
             <x-slot:linkbar>{{ $races->links() }}</x-slot:linkbar>
             <x-slot:thead>
                 <tr>
                     <x-table-th>
-                        <div class="text-blue-700 hover:underline">
+                        <div class="text-blue-700 font-semibold hover:underline">
                             @sortablelink('start_time', 'Date') {{ $date_label }}
                         </div>
                     </x-table-th>   
@@ -28,7 +28,7 @@ $date_label = '(GMT)';
                     <x-table-th>Download Seed</x-table-th>
                     <x-table-th>Description</x-table-th>
                     <x-table-th>
-                        <div class="text-blue-700 hover:underline">
+                        <div class="text-blue-700 font-semibold hover:underline">
                             @sortablelink('result_count', 'Participants')
                         </div>
                     </x-table-th>

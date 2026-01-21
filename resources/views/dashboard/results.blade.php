@@ -1,6 +1,6 @@
 @use('Illuminate\Support\Str')
 <x-layout>
-    <x-slot:title>ALttPR Asyncs - Results for {{ Auth::user()->display_name }}</x-slot:title>
+    <x-slot:title>Results for {{ Auth::user()->display_name }}</x-slot:title>
     <x-slot:heading>Results for {{ Auth::user()->display_name }}</x-slot:heading>
         <x-table>
             <x-slot:linkbar>{{ $results->links() }}</x-slot:linkbar>
