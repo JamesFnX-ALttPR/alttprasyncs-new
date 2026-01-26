@@ -11,33 +11,49 @@ $race_time_string = $race_time->setTimezone(Auth::user()->timezone)->format('F j
 $race_time_string = $race_time->format('F j, Y g:i:s A');
 @endphp
 @endif
-<span class="font-bold">{{ $race_time_string }}</span><br />
+<div class="mx-auto w-full text-center">
+    <span class="font-bold">{{ $race_time_string }}</span><br />
 @if($race->description != null)
-<span class="font-semibold">{{ $race->description }}</span><br />
+    <span class="font-semibold">{{ $race->description }}</span><br />
 @endif
-<x-hash-images size="30" hash="{{ $race->hash }}" /><br />
-<x-link target="_blank" href="{{ $race->seed }}">Download Seed</x-link><br />
-<x-link href="/mode/{{ $race->mode_id }}">{{ $mode }}</x-link>@if($mode_desc != null) - {{ $mode_desc }}@endif<br />
+    <x-hash-images size="30" hash="{{ $race->hash }}" />
+    <x-link target="_blank" href="{{ $race->seed }}">Download Seed</x-link><br />
+    <x-link href="/mode/{{ $race->mode_id }}">{{ $mode }}</x-link>@if($mode_desc != null) - {{ $mode_desc }}@endif<br />
 @if($race->spoiler_race == 1)
-<br /><a target="_blank" href="{{ $race->spoiler_log }}">Link to Spoiler</a><br />
+    <a target="_blank" href="{{ $race->spoiler_log }}">Link to Spoiler</a><br />
 @endif
 @if($race->result_avg_time != null)
-Average Time - {{ date("G:i:s", $race->result_avg_time) }}</p><hr />
+    Average Time - <span class="font-semibold">{{ date("G:i:s", $race->result_avg_time) }}</span>
 @endif
+</div><hr />
 @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('cr')->count() > 0)
-    
+@php
+$crActive = 1;
+@endphp
+@else
+@php
+$crActive = 0;
+@endphp
 @endif
-
+@if (DB::table('results')->where('race_id', $race->id)->whereNotNull('vod')->count() > 0)
+@php
+$vodActive = 1;
+@endphp
+@else
+@php
+$vodActive = 0;
+@endphp
+@endif
         <x-table>
             <x-slot:thead>
                 <tr>
                     <x-table-th>Place</x-table-th>
                     <x-table-th>Name</x-table-th>
                     <x-table-th>Time</x-table-th>
-                    @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('cr')->count() > 0)
+                    @if ($crActive == 1)
                         <x-table-th>Collection Rate</x-table-th>
                     @endif
-                    @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('vod')->count() > 0)
+                    @if ($vodActive == 1)
                         <x-table-th>Link to VOD</x-table-th>
                     @endif
                     <x-table-th>Comments</x-table-th>
@@ -85,7 +101,7 @@ Average Time - {{ date("G:i:s", $race->result_avg_time) }}</p><hr />
                     <x-table-td>{{ $loop->iteration }}</x-table-td>
                     <x-table-td :isBold="true"><x-link href="/racer/{{ $result->racer->id }}">{{ $result->racer->name }}</x-link></x-table-td>
                     <x-table-td :isBold="true">@if ($result->forfeit == 1)Forfeit @else{{ date("G:i:s", $result->time) }}@endif</x-table-td>
-                    @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('cr')->count() > 0)
+                    @if ($crActive == 1)
                         <x-table-td>
                             @if ($result->cr == null)
                                 N/A
@@ -94,7 +110,7 @@ Average Time - {{ date("G:i:s", $race->result_avg_time) }}</p><hr />
                             @endif
                         </x-table-td>
                     @endif
-                    @if (DB::table('results')->where('race_id', $race->id)->whereNotNull('vod')->count() > 0)
+                    @if ($vodActive == 1)
                         @if ($result->vod == null)
                             <x-table-td>N/A</x-table-td>
                         @else

@@ -23,7 +23,7 @@ $hash_array = explode(' ', $race->hash);
     </x-slot:title>
     <x-slot:heading>
         Results for @if ($race->from_racetime == 1)
-            <x-link href="https://racetime.gg/{{ $race->name }}">{{ Str::after($race->name, '/') }}</x-link>
+            <x-link target="_blank" href="https://racetime.gg/{{ $race->name }}">{{ Str::after($race->name, '/') }}</x-link>
         @else
             {{ $race->name }}
         @endif
@@ -38,12 +38,17 @@ $hash_array = explode(' ', $race->hash);
                     <input type="hidden" name="race" value="{{ $race->id }}" />
                     <div class="flex justify-center">
                         <div>
-                            <select class="py-1" name="series">
+                            <select class="py-1 js-example-basic-single" name="series">
                                 <option value="">Choose Series</option>
         @foreach(Auth::user()->series as $series)
                                 <option value="{{ $series->id }}">{{ $series->description }}</option>
         @endforeach
                             </select>
+                            <script type="text/javascript">
+                                $(document).ready(function() {
+                                    $('.js-example-basic-single').select2();
+                                });
+                            </script>
                         </div>
                         <div>
                             <button type="submit" class="w-auto text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-1 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Race to Series</button>

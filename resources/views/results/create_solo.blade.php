@@ -1,7 +1,7 @@
             Participants: @foreach($racer_list as $racer) {{ $racer->name }}@if(! $loop->last),@endif
 @endforeach
-        </p>
-        </div><hr />
+        </div>
+    </div><hr />
         <div class="flex justify-center">
             <form class="max-w-sm mx-auto" method="POST" action="/result">
                 @csrf

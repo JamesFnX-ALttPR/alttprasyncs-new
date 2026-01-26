@@ -20,7 +20,13 @@ $date_label = '(GMT)';
                     <select id="excludeRacer" name="excludeRacer">
                         <option value=""></option>
 @foreach($racers as $racer)
-                        <option value="{{ $racer->id }}">{{ $racer->name }}</option>
+                        <option value="{{ $racer->id }}"
+@isset($_GET['excludeRacer'])
+@if ($_GET['excludeRacer'] == $racer->id)
+ selected
+@endif    
+@endisset
+>{{ $racer->name }}</option>
 @endforeach
                     </select>
                 </div>

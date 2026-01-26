@@ -1,10 +1,15 @@
 @use('Baspa\Timezones\Facades\Timezones')
 @php
-  $timezones = Timezones::toArray();
+  $timezones = Timezones::toArray(grouped: true);
 @endphp
 <x-layout>
     <x-slot:title>Register</x-slot:title>
     <x-slot:heading>Create New Account</x-slot:heading>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('.js-example-basic-single').select2();
+      });
+    </script>
     <section class="flex flex-col items-center pt-6">
   <div
     class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -39,16 +44,20 @@
         </div>
         <div>
           <x-form-label for="timezone">Timezone</x-form-label>
-          <select id="timezone" name="timezone" value="">
+          <select id="timezone" name="timezone" class="js-example-basic-single" value="">
             <option value="">Select your Timezone</option>
-@foreach ($timezones as $timezone => $details)
-            <option value="{{ $timezone }}">{!! $details !!}</option>
+@foreach ($timezones as $continent => $countries)
+            <optgroup label="{{ $continent }}">
+@foreach ($countries as $timezone => $details)
+              <option value="{{ $timezone }}">{!! $details !!}</option>
+@endforeach
+            </optgroup>
 @endforeach
           </select>
         </div>
         <div>
           <x-form-label for="racer">Select Racetime Racer</x-form-label>
-          <select id="racer" name="racer">
+          <select class="js-example-basic-single" id="racer" name="racer">
             <option value=""></option>
             <option value="0">I don't have a racetime.gg account</option>
 @foreach ($racers as $racer)
